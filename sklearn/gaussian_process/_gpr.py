@@ -450,6 +450,9 @@ class GaussianProcessRegressor(MultiOutputMixin, RegressorMixin, BaseEstimator):
             if y_mean.ndim > 1 and y_mean.shape[1] == 1:
                 y_mean = np.squeeze(y_mean, axis=1)
 
+            if not return_std and not return_cov:
+                return y_mean
+
             # Alg 2.1, page 19, line 5 -> v = L \ K(X_test, X_train)^T
             V = solve_triangular(
                 self.L_, K_trans.T, lower=GPR_CHOLESKY_LOWER, check_finite=False
